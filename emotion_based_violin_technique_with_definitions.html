@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>提琴情緒導向教材</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    select, button { font-size: 16px; margin: 5px; }
+    .param { margin: 5px 0; }
+    .param span { display: inline-block; width: 100px; }
+    .value-box { display: inline-block; width: 30px; text-align: center; font-weight: bold; border-radius: 4px; color: white; }
+    .color-1 { background-color: #3498db; }
+    .color-2 { background-color: #5dade2; }
+    .color-3 { background-color: #f4d03f; color: black; }
+    .color-4 { background-color: #f39c12; }
+    .color-5 { background-color: #e67e22; }
+    .color-6 { background-color: #e74c3c; }
+    #definitionSection { display: none; margin-top: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 8px; background-color: #f9f9f9; }
+  </style>
+</head>
+<body>
+  <h2>🎻 提琴情緒導向互動教材</h2>
+  <label for="emotionSelect">請選擇情緒：</label>
+  <select id="emotionSelect" onchange="updateParameters()">
+    <option value="">-- 選擇情緒 --</option>
+    <option value="勝利">🏆 勝利</option>
+    <option value="興奮">🎉 興奮</option>
+    <option value="喜悅">😊 喜悅</option>
+    <option value="幸福、愛">💖 幸福、愛</option>
+    <option value="戀">💘 戀</option>
+    <option value="悲痛">😭 悲痛</option>
+    <option value="憂傷">😢 憂傷</option>
+    <option value="堅定">💪 堅定</option>
+    <option value="焦慮">😰 焦慮</option>
+    <option value="自在">😌 自在</option>
+    <option value="神秘">🌀 神秘</option>
+    <option value="希望">🌈 希望</option>
+    <option value="壓抑">😶‍🌫️ 壓抑</option>
+    <option value="驚訝">😲 驚訝</option>
+    <option value="溫暖">🌞 溫暖</option>
+    <option value="孤獨">🌙 孤獨</option>
+    <option value="振奮">⚡ 振奮</option>
+  </select>
+
+  <div id="parameters" style="margin-top: 20px;"></div>
+
+  <button onclick="toggleDefinitions()">📖 顯示／隱藏技術參數說明</button>
+  <div id="definitionSection">
+    <div>
+      <button onclick="showTab('simple')">簡化版</button>
+      <button onclick="showTab('advanced')">進階版</button>
+    </div>
+    <div id="simpleTab" style="margin-top: 15px;">
+      <h3>🎯 簡化版定義</h3>
+      <ul>
+        <li><strong>弓速：</strong>運弓的速度，影響音色的流暢與張力</li>
+        <li><strong>弓速變化：</strong>弓速是否穩定或有變化，影響情緒起伏</li>
+        <li><strong>跳弓高度：</strong>弓離開琴弦的高度，影響音符的跳躍感</li>
+        <li><strong>律動：</strong>節奏的穩定與彈性，影響音樂的呼吸感</li>
+        <li><strong>弓用量：</strong>使用弓的長度，影響音色的開放程度</li>
+        <li><strong>弓壓：</strong>弓對琴弦的壓力，影響音色的厚度與強度</li>
+      </ul>
+    </div>
+    <div id="advancedTab" style="display: none; margin-top: 15px;">
+      <h3>🔬 進階版定義</h3>
+      <ul>
+        <li><strong>弓速：</strong>影響音色的張力與能量。慢弓可營造溫暖或沉穩氛圍，快弓則帶來緊張或激動感。</li>
+        <li><strong>弓速變化：</strong>穩定的弓速給人平靜感，變化大的弓速可產生情緒波動與戲劇性。</li>
+        <li><strong>跳弓高度：</strong>高度越高，音符越跳躍、輕盈；低跳弓則更緊湊、具攻擊性。</li>
+        <li><strong>律動：</strong>與節奏的彈性與推拉感有關，影響音樂的呼吸與情緒流動。</li>
+        <li><strong>弓用量：</strong>全弓可產生開放、宏大的音色；短弓則更集中、敏捷。</li>
+        <li><strong>弓壓：</strong>壓力越大，音色越厚實、有力；壓力輕則音色細膩、透明。</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const emotionData = {
+      "勝利": [6,2,2,3,7,4],
+      "興奮": [7,2,4,5,4,5],
+      "喜悅": [5,2,5,5,3,2],
+      "幸福、愛": [4,4,2,3,4,3],
+      "戀": [5,6,2,4,5,3],
+      "悲痛": [3,2,2,4,4,5],
+      "憂傷": [5,4,1,2,5,2],
+      "堅定": [2,2,3,4,2,1],
+      "焦慮": [2,6,4,3,4,1],
+      "自在": [3,4,5,3,6,4],
+      "神秘": [1,2,5,5,5,1],
+      "希望": [3,4,4,2,4,2],
+      "壓抑": [5,5,3,5,3,4],
+      "驚訝": [5,3,4,1,4,3],
+      "溫暖": [3,3,5,6,5,4],
+      "孤獨": [4,5,1,3,4,2],
+      "振奮": [2,2,5,2,5,5]
+    };
+
+    function updateParameters() {
+      const emotion = document.getElementById("emotionSelect").value;
+      const container = document.getElementById("parameters");
+      container.innerHTML = "";
+      if (!emotion || !emotionData[emotion]) return;
+      const labels = ["弓速", "弓速變化", "跳弓高度", "律動", "弓用量", "弓壓"];
+      const values = emotionData[emotion];
+      for (let i = 0; i < labels.length; i++) {
+        const val = values[i];
+        const colorClass = "color-" + Math.max(1, Math.min(6, val));
+        container.innerHTML += `<div class="param"><span>${labels[i]}：</span><div class="value-box ${colorClass}">${val}</div></div>`;
+      }
+    }
+
+    function toggleDefinitions() {
+      const section = document.getElementById("definitionSection");
+      section.style.display = section.style.display === "none" ? "block" : "none";
+    }
+
+    function showTab(tab) {
+      document.getElementById("simpleTab").style.display = tab === "simple" ? "block" : "none";
+      document.getElementById("advancedTab").style.display = tab === "advanced" ? "block" : "none";
+    }
+  </script>
+</body>
+</html>
